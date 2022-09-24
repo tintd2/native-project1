@@ -1,0 +1,10 @@
+apiVersion: v1
+name: techtrends
+description: Install techtrends deployment
+keywords:
+# - python
+- techtrends 
+version: 1.0.0
+maintainers:
+- name: tintd2 
+  email: tintd2@fsoft.com.vn

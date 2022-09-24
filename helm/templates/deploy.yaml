@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: techtrends-deployment
+    # tag: alpine
+  name: techtrends
+  namespace: {{ .Values.namespace.name }} 
+spec:
+  replicas: {{ .Values.replicaCount }} 
+  selector:
+    matchLabels:
+      app: techtrends
+      # tag: alpine
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: techtrends
+        # tag: alpine
+    spec:
+      containers:
+      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        name: techtrends
+        #  - containerPort: 3111
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
+          # requests:
+          #   memory: "64Mi"
+          #   cpu: "250m"
+          # limits:
+          #   memory: "128Mi"
+          #   cpu: "500m"
+        ports:
+          - name: liveness-port
+            containerPort: 3111
+            hostPort: 3111
+        livenessProbe:
+          httpGet:
+            path:  {{ .Values.livenessProbe }}
+            port: liveness-port
+          failureThreshold: 1
+          periodSeconds: 60
+          # Override pod-level terminationGracePeriodSeconds #
+          terminationGracePeriodSeconds: 60
