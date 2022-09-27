@@ -26,10 +26,6 @@ spec:
         name: techtrends-deployment
         resources:
 {{ toYaml .Values.resources | indent 12 }}
-        # ports:
-        #   - name: liveness-port
-        #     containerPort: 3111
-        #     hostPort: 3111
         livenessProbe:
           httpGet:
             path:  {{ .Values.livenessProbe }}
