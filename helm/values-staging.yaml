@@ -25,7 +25,9 @@ resources:
 containerPort: 3111
 
 livenessProbe: /healthz
+livenessProbePort: 3111
 readinessProbe: /healthz
+readinessProbePort: 3111
 
 ##
 # namespace: staging

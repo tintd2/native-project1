@@ -43,8 +43,14 @@ spec:
         livenessProbe:
           httpGet:
             path:  {{ .Values.livenessProbe }}
-            port: liveness-port
+            port: {{ .Values.livenessProbePort }}
           failureThreshold: 1
           periodSeconds: 60
-          # Override pod-level terminationGracePeriodSeconds #
+          terminationGracePeriodSeconds: 60
+        readinessProbe:
+          httpGet:
+            path:  {{ .Values.readinessProbe }}
+            port: {{ .Values.readinessProbePort }}
+          failureThreshold: 1
+          periodSeconds: 60
           terminationGracePeriodSeconds: 60
