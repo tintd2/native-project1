@@ -3,11 +3,12 @@ import sqlite3
 from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash, session
 import logging
 from werkzeug.exceptions import abort
-from flask_session import Session
+# from flask_session import Session
 import sys 
 from datetime import datetime
-
  
+db_connection_count = 0
+
 def log(x): 
     stdout_fileno = sys.stdout
     now = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
@@ -18,7 +19,17 @@ def log(x):
 def get_db_connection():
     connection = sqlite3.connect('database.db')
     connection.row_factory = sqlite3.Row
-    session["db_connection_count"] = session["db_connection_count"] + 1
+    # session["db_connection_count"] = session["db_connection_count"] + 1
+
+    f = open("db_connection_count.txt", "r")
+    db_connection_count = int(float(f.read()))
+    f.close()
+
+    f = open("db_connection_count.txt", "w")
+    db_connection_count = db_connection_count  + 1
+    f.write(str(db_connection_count))
+    f.close()
+
     return connection
 
 # Function to get a post using its ID
@@ -31,9 +42,9 @@ def get_post(post_id):
 
 # Define the Flask application
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your secret key'
-app.config['SESSION_TYPE'] = 'filesystem'
-Session(app)
+# app.config['SECRET_KEY'] = 'your secret key'
+# app.config['SESSION_TYPE'] = 'filesystem'
+# Session(app)
 
 # Define the main route of the web application 
 @app.route('/')
@@ -62,10 +73,12 @@ def healthz():
 
 @app.route('/metrics')
 def metrics():
+    f = open("db_connection_count.txt", "r")
+    db_connection_count = f.read()
+    f.close()
     connection = get_db_connection()
     posts = connection.execute('SELECT count(*) as count FROM posts').fetchall()
-    connection.close()
-    return '{"db_connection_count": '+str(session["db_connection_count"])+' , "post_count": ' + str(posts[0]['count']) + '}'
+    return '{"db_connection_count": ' + str(db_connection_count) +' , "post_count": ' + str(posts[0]['count']) + '}'
 
 # Define the About Us page
 @app.route('/about')
