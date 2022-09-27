@@ -4,13 +4,13 @@ metadata:
   labels:
     app: techtrends-deployment
     # tag: alpine
-  name: techtrends
+  name: techtrends-deployment
   namespace: {{ .Values.namespace.name }} 
 spec:
   replicas: {{ .Values.replicaCount }} 
   selector:
     matchLabels:
-      app: techtrends
+      app: techtrends-deployment
       # tag: alpine
   strategy:
     rollingUpdate:
@@ -20,13 +20,13 @@ spec:
   template:
     metadata:
       labels:
-        app: techtrends
+        app: techtrends-deployment
         # tag: alpine
     spec:
       containers:
       - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        name: techtrends
+        name: techtrends-deployment
         #  - containerPort: 3111
         resources:
 {{ toYaml .Values.resources | indent 12 }}
