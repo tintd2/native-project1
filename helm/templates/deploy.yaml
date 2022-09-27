@@ -51,6 +51,3 @@ spec:
           httpGet:
             path:  {{ .Values.readinessProbe }}
             port: {{ .Values.readinessProbePort }}
-          failureThreshold: 1
-          periodSeconds: 60
-          terminationGracePeriodSeconds: 60
