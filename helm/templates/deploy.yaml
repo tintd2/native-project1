@@ -1,17 +1,70 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   labels:
+#     app: techtrends-deployment
+#     # tag: alpine
+#   name: techtrends-deployment
+#   namespace: {{ .Values.namespace.name }} 
+# spec:
+#   replicas: {{ .Values.replicaCount }} 
+#   selector:
+#     matchLabels:
+#       app: techtrends-deployment
+#       # tag: alpine
+#   strategy:
+#     rollingUpdate:
+#       maxSurge: 25%
+#       maxUnavailable: 25%
+#     type: RollingUpdate
+#   template:
+#     metadata:
+#       labels:
+#         app: techtrends-deployment
+#         # tag: alpine
+#     spec:
+#       containers:
+#       - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+#         imagePullPolicy: {{ .Values.image.pullPolicy }}
+#         name: techtrends-deployment
+#         #  - containerPort: 3111
+#         resources:
+# {{ toYaml .Values.resources | indent 12 }}
+#           # requests:
+#           #   memory: "64Mi"
+#           #   cpu: "250m"
+#           # limits:
+#           #   memory: "128Mi"
+#           #   cpu: "500m"
+#         ports:
+#           - name: liveness-port
+#             containerPort: 3111
+#             hostPort: 3111
+#         livenessProbe:
+#           httpGet:
+#             path:  {{ .Values.livenessProbe }}
+#             port: {{ .Values.livenessProbePort }}
+#           failureThreshold: 1
+#           periodSeconds: 60
+#           terminationGracePeriodSeconds: 60
+#         readinessProbe:
+#           httpGet:
+#             path:  {{ .Values.readinessProbe }}
+#             port: {{ .Values.readinessProbePort }}
+
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: techtrends-deployment
-    # tag: alpine
-  name: techtrends-deployment
+    app: python-helloworld
+  name: python-helloworld
   namespace: {{ .Values.namespace.name }} 
 spec:
   replicas: {{ .Values.replicaCount }} 
   selector:
     matchLabels:
-      app: techtrends-deployment
-      # tag: alpine
+      app: python-helloworld
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -20,34 +73,9 @@ spec:
   template:
     metadata:
       labels:
-        app: techtrends-deployment
-        # tag: alpine
+        app: python-helloworld
     spec:
       containers:
       - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        name: techtrends-deployment
-        #  - containerPort: 3111
-        resources:
-{{ toYaml .Values.resources | indent 12 }}
-          # requests:
-          #   memory: "64Mi"
-          #   cpu: "250m"
-          # limits:
-          #   memory: "128Mi"
-          #   cpu: "500m"
-        ports:
-          - name: liveness-port
-            containerPort: 3111
-            hostPort: 3111
-        livenessProbe:
-          httpGet:
-            path:  {{ .Values.livenessProbe }}
-            port: {{ .Values.livenessProbePort }}
-          failureThreshold: 1
-          periodSeconds: 60
-          terminationGracePeriodSeconds: 60
-        readinessProbe:
-          httpGet:
-            path:  {{ .Values.readinessProbe }}
-            port: {{ .Values.readinessProbePort }}
+        imagePullPolicy: IfNotPresent 
+        name: python-helloworld
